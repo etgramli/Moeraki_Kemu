@@ -38,7 +38,7 @@ public interface IField {
 	
 	/**
 	 * Returns the length of one edge of the (quare) field.
-	 * @return
+	 * @return Length of the square field.
 	 */
 	int getEdgeLength();
 }

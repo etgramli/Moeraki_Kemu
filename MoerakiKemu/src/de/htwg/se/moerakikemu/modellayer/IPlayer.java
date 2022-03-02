@@ -16,13 +16,13 @@ public interface IPlayer {
 	
 	/**
 	 * Adds an amount of points to the current amount of points.
-	 * @param amount Must be greater than 0.
+	 * @param amount Must be greater than 0, or it has no effect.
 	 */
 	void addPoints(int amount);
 	
 	/**
 	 * Sets the name of a player.
-	 * @param name
+	 * @param name Name as string, should not be null.
 	 */
 	void setName (String name);
 	

@@ -20,74 +20,77 @@ import java.awt.Color;
 public class MainPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	IController myController;
-	IControllerPlayer myPlayerController;
+	private IController myController;
+	private IControllerPlayer myPlayerController;
 
+	private ImageIcon blackIcon = new ImageIcon();
+	private ImageIcon redIcon = new ImageIcon();
+	private ImageIcon greenIcon = new ImageIcon();
 
-	ImageIcon blackIcon;
-	ImageIcon redIcon;
-	ImageIcon greenIcon;
+	private JButton[][] field;
 
+	private void initIconImages() {
+		final int iconDimension = 40;
 
-	GridLayout gridForSpots;
-	JButton[][] field;
+		Image imageIcon = new ImageIcon("Spot_black.png").getImage();
+		blackIcon.setImage(imageIcon.getScaledInstance(iconDimension, iconDimension, Image.SCALE_SMOOTH));
 
-	private MouseListener listener = new MouseAdapter() {
-		@Override
-		public void mousePressed(MouseEvent me) {
-			JButton pressedButton = (JButton) me.getSource();
-			
-			// Occupy Spot
-			int []coordinates = getButtonCoordinates(pressedButton);
-			String name = myController.getIsOccupiedByPlayer(coordinates[0]-1, coordinates[1]-1);
-			if ("".equals(name)) {
-				setSpotColor(pressedButton, myPlayerController.getCurrentPlayerName());
-				myController.occupy(coordinates[0]-1, coordinates[1]-1);
+		imageIcon = new ImageIcon("Spot_blue.png").getImage();
+		redIcon.setImage(imageIcon.getScaledInstance(iconDimension, iconDimension, Image.SCALE_SMOOTH));
+
+		imageIcon = new ImageIcon("Spot_green.png").getImage();
+		greenIcon.setImage(imageIcon.getScaledInstance(iconDimension, iconDimension, Image.SCALE_SMOOTH));
+	}
+
+	private JButton[][] getJButtonField(final int fieldLength) {
+		MouseListener listener = new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent me) {
+				JButton pressedButton = (JButton) me.getSource();
+				int []coordinates = getButtonCoordinates(pressedButton);
+				String name = myController.getIsOccupiedByPlayer(coordinates[0]-1, coordinates[1]-1);
+				if ("".equals(name)) {
+					setSpotColor(pressedButton, myPlayerController.getCurrentPlayerName());
+					myController.occupy(coordinates[0]-1, coordinates[1]-1);
+				}
+
 			}
-			
-		}
-	};
+		};
 
-	
+		JButton[][] newField = new JButton[fieldLength][fieldLength];
+		for (int i = 0; i < fieldLength; i++) {
+			for (int j = 0; j < fieldLength; j++) {
+				newField[i][j] = new JButton();
+				this.add(newField[i][j]);
+				newField[i][j].addMouseListener(listener);
+				newField[i][j].setToolTipText("(" + (i + 1) + "/" + (j + 1) + ")");
+				newField[i][j].setText("+");
+				newField[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
+				newField[i][j].setVerticalTextPosition(SwingConstants.CENTER);
+				newField[i][j].setOpaque(false);
+				newField[i][j].setContentAreaFilled(false);
+				newField[i][j].setBorderPainted(false);
+			}
+		}
+
+		return newField;
+	}
+
 	public MainPanel(IController controller, IControllerPlayer playerController, final int fieldLength) {
 		super();
 		this.myController = controller;
 		this.myPlayerController = playerController;
 		this.setBackground(new Color(200, 120, 40));
-		
-		// Read and scale images for occupied spots
-		blackIcon = new ImageIcon("Spot_black.png");
-		Image blackIconImg = blackIcon.getImage();
-		blackIcon.setImage(blackIconImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		redIcon = new ImageIcon("Spot_blue.png");
-		Image redIconImg = redIcon.getImage();
-		redIcon.setImage(redIconImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		greenIcon = new ImageIcon("Spot_green.png");
-		Image greenIconImg = greenIcon.getImage();
-		greenIcon.setImage(greenIconImg.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		
-		gridForSpots = new GridLayout(fieldLength, fieldLength);
-		this.setLayout(gridForSpots);
-		field = new JButton[fieldLength][fieldLength];
-		for (int i = 0; i < fieldLength; i++) {
-			for (int j = 0; j < fieldLength; j++) {
-				field[i][j] = new JButton();
-				this.add(field[i][j]);
-				field[i][j].addMouseListener(listener);
-				field[i][j].setToolTipText("(" + (i+1) + "/" + (j+1) + ")");
-				field[i][j].setText("+");
-				field[i][j].setHorizontalTextPosition(SwingConstants.CENTER);
-				field[i][j].setVerticalTextPosition(SwingConstants.CENTER);
-				field[i][j].setOpaque(false);
-				field[i][j].setContentAreaFilled(false);
-				field[i][j].setBorderPainted(false);
-			}
-		}
+
+		initIconImages();
+
+		this.setLayout(new GridLayout(fieldLength, fieldLength));
+		field = getJButtonField(fieldLength);
 	}
 
 	
 	public void updateField() {
-		int fieldLength = myController.getEdgeLength();
+		final int fieldLength = myController.getEdgeLength();
 		for (int i = 0; i < fieldLength; i++) {
 			for (int j = 0; j < fieldLength; j++) {
 				setSpotColor(field[i][j], myController.getIsOccupiedByPlayer(i, j));
@@ -108,8 +111,8 @@ public class MainPanel extends JPanel {
 		return xyCoordinates;
 	}
 
-	private void setSpotColor(JButton buttonToChange, String playerNameOnSpot) {
-		if(playerNameOnSpot == null || "".equals(playerNameOnSpot)){
+	private void setSpotColor(JButton buttonToChange, final String playerNameOnSpot) {
+		if (playerNameOnSpot == null || "".equals(playerNameOnSpot)){
 			buttonToChange.setText("+");
 			buttonToChange.setIcon(null);
 		} else if (myPlayerController.getPlayer1Name().equals(playerNameOnSpot)) {
@@ -118,12 +121,10 @@ public class MainPanel extends JPanel {
 		} else if (myPlayerController.getPlayer2Name().equals(playerNameOnSpot)) {
 			buttonToChange.setText("");
 			buttonToChange.setIcon(redIcon);
-		} else if("StartDot".equals(playerNameOnSpot)){
+		} else if ("StartDot".equals(playerNameOnSpot)){
 			buttonToChange.setText("");
 			buttonToChange.setIcon(greenIcon);
-
 		}
 	}
-
 
 }

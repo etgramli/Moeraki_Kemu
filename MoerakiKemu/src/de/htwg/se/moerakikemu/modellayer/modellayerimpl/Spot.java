@@ -33,7 +33,7 @@ public class Spot {
 		} else {
 			this.occupiedByPlayer = playerName;
 			occupied = true;
-			return occupied;
+			return true;
 		}
 	}
 

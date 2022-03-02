@@ -1,3 +1,5 @@
 ./MoerakiKemu/bin
 *.class
 *.log
+*.iml
+.idea/

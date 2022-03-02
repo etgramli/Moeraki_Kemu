@@ -6,7 +6,7 @@ public class ControllerHelper {
 	private boolean finished;
 	private Square square;
 	
-	public ControllerHelper (int xCoordinates, int yCoordinates, int maxLength){
+	public ControllerHelper (final int xCoordinates, final int yCoordinates, final int maxLength){
 		this.x = xCoordinates;
 		this.y = yCoordinates;
 		this.maxLength = maxLength;
@@ -20,29 +20,31 @@ public class ControllerHelper {
 	}
 	
 	public int[] getSquareArray(){
-		return squareArray;
+		int[] returnArray = new int[squareArray.length];
+		System.arraycopy(squareArray, 0, returnArray, 0, squareArray.length);
+		return returnArray;
 	}
 	
 	public void resetSquareTest(){
 		square.resetSquare();
 	}
 	
-	class Square {
+	private class Square {
 		private SquareState squareState;
 		
-		public Square(){
+		Square(){
 			squareState = new EdgeSquare();
 		}
 		
-		public void setSquare(SquareState s){
+		void setSquare(SquareState s){
 			squareState = s;
 		}
 		
-		public void resetSquare(){
+		void resetSquare(){
 			setSquare(new EdgeSquare());
 		}
 		
-		public void test(){
+		void test(){
 			while(!finished){
 				squareState.test(this);
 			}
@@ -50,10 +52,10 @@ public class ControllerHelper {
 	}
 	
 	interface SquareState{
-		public void test(Square square);
+		void test(Square square);
 	}
 	
-	class EdgeSquare implements SquareState{
+	private class EdgeSquare implements SquareState{
 		@Override
 		public void test(Square square){
 			if(x == 0 && y == 0){
@@ -78,9 +80,9 @@ public class ControllerHelper {
 		}
 	}
 	
-	class BorderSquare implements SquareState{
+	private class BorderSquare implements SquareState{
 		
-		public BorderSquare(){
+		BorderSquare(){
 			test(square);
 		}
 
@@ -112,15 +114,14 @@ public class ControllerHelper {
 		}
 	}
 	
-	class InnerSquare implements SquareState{
-		
-		public InnerSquare(){
+	private class InnerSquare implements SquareState{
+		InnerSquare(){
 			test(square);
 		}
 
 		@Override
 		public void test(Square square){
-			if(x < maxLength && y < maxLength){
+			if(x < maxLength && y < maxLength) {
 				squareArray[0] = 4;
 				setArray(1, x, y, x + 1, y - 1);
 				setArray(5, x, y, x - 1, y - 1);
@@ -132,7 +133,8 @@ public class ControllerHelper {
 	}
 
 	
-	private void setArray(int start, int edgeOne, int edgeTwo, int edgeThree, int edgeFour){
+	private void setArray(final int start, final int edgeOne, final int edgeTwo,
+						  final int edgeThree, final int edgeFour){
 		squareArray[start] = edgeOne;
 		squareArray[start + 1] = edgeTwo;
 		squareArray[start + 2] = edgeThree;

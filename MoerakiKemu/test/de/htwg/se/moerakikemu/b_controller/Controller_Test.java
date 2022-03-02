@@ -9,20 +9,25 @@ import de.htwg.se.moerakikemu.controller.*;
 import de.htwg.se.moerakikemu.controller.controllerimpl.*;
 
 public class Controller_Test {
-	IController controller;
-	IControllerPlayer playerController;
+
+	private static final String PLAYER1NAME = "Player1";
+	private static final String PLAYER2NAME = "Player2";
+
+	private IController controller;
+	private IControllerPlayer playerController;
 	
 	@Before
 	public void setUp(){
 		playerController = new ControllerPlayer();
 		controller = new Controller(6, playerController);
-		playerController.setName("Player1", "Player2");
+		playerController.setName(PLAYER1NAME, PLAYER2NAME);
 	}
 	
 	@Test
 	public void test_occupy_returnNullIfOccupied(){
 		
 		controller.occupy(3, 3);
+
 		for(int i = 0; i < 4; i++){
 			for(int j = 0; j <= 5; j++){
 				if(i == 3 && j == 3) {
@@ -46,9 +51,9 @@ public class Controller_Test {
 		assertEquals(0, controller.occupy(5, 4));
 		assertEquals(0, controller.occupy(5, 5));
 		
-		for(int i = 0; i <= 5; i++){
-			for(int j = 0; j <= 5; j++){
-					assertEquals(-1, controller.occupy(i, j));
+		for (int i = 0; i <= 5; i++){
+			for (int j = 0; j <= 5; j++){
+				assertEquals(-1, controller.occupy(i, j));
 			}
 		}
 	}
@@ -65,26 +70,26 @@ public class Controller_Test {
 		controller.occupy(2, 1);
 		controller.occupy(2, 2);
 		
-		assertEquals("Player1", playerController.getPlayer1Name());
-		assertEquals("Player2", playerController.getPlayer2Name());
+		assertEquals(PLAYER1NAME, playerController.getPlayer1Name());
+		assertEquals(PLAYER2NAME, playerController.getPlayer2Name());
 	}
 	
 	@Test
 	public void test_selectNextPlayer_wasPlayerOneIsPlayerTwoNextPlayerOne() {
 		assertEquals(playerController.getCurrentPlayerName(), "StartDot");
 		playerController.selectNextPlayer();
-		assertEquals(playerController.getCurrentPlayerName(), "Player1");
+		assertEquals(playerController.getCurrentPlayerName(), PLAYER1NAME);
 		playerController.selectNextPlayer();
-		assertEquals(playerController.getCurrentPlayerName(), "Player2");
+		assertEquals(playerController.getCurrentPlayerName(), PLAYER2NAME);
 		playerController.selectNextPlayer();
-		assertEquals(playerController.getCurrentPlayerName(), "Player1");
+		assertEquals(playerController.getCurrentPlayerName(), PLAYER1NAME);
 	}
 	
 	@Test
 	public void test_setName_isPlayer1Player2() {
-		playerController.setName("Player1", "Player2");
-		assertEquals(playerController.getPlayer1Name(), "Player1");
-		assertEquals(playerController.getPlayer2Name(), "Player2");
+		playerController.setName(PLAYER1NAME, PLAYER2NAME);
+		assertEquals(playerController.getPlayer1Name(), PLAYER1NAME);
+		assertEquals(playerController.getPlayer2Name(), PLAYER2NAME);
 	}
 	
 	@Test
@@ -105,10 +110,10 @@ public class Controller_Test {
 		controller.occupy(1, 2);
 		controller.occupy(1, 0);
 		
-		assertEquals("Player1", controller.getWinner());
+		assertEquals(PLAYER1NAME, controller.getWinner());
 		
 		playerController = new ControllerPlayer();
-		playerController.setName("Player1", "Player2");
+		playerController.setName(PLAYER1NAME, PLAYER2NAME);
 		controller = new Controller(5, playerController);
 		assertEquals("", controller.getWinner());
 
@@ -122,7 +127,7 @@ public class Controller_Test {
 		controller.occupy(0, 1);
 		controller.occupy(1, 1);
 		
-		assertEquals("Player2", controller.getWinner());
+		assertEquals(PLAYER2NAME, controller.getWinner());
 	}
 	
 	@Test
@@ -133,7 +138,7 @@ public class Controller_Test {
 		controller.occupy(0, 0);
 		
 		String a = controller.getIsOccupiedByPlayer(0, 0); //0,0 because occupy get the direkt input from a player, so there is a -1, -1 needed
-		assertEquals("Player1", a);
+		assertEquals(PLAYER1NAME, a);
 	}
 	
 	@Test
@@ -171,4 +176,5 @@ public class Controller_Test {
 		controller.setEnd(true);
 		assertEquals(State.GAME_FINISHED, controller.getState());
 	}
+
 }

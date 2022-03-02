@@ -26,11 +26,11 @@ public class Field implements IField {
 		return this.edgeLength;
 	}
 
-	public boolean getIsOccupied(int x, int y) {
+	public boolean getIsOccupied(final int x, final int y) {
 		return !getIsOccupiedFrom(x, y).isEmpty();
 	}
 
-	public boolean occupy(int x, int y, final String playerName) {
+	public boolean occupy(final int x, final int y, final String playerName) {
 		if (array[x][y].isOccupied()) {
 			return false;
 		} else {
@@ -40,8 +40,8 @@ public class Field implements IField {
 		}
 	}
 
-	public String getIsOccupiedFrom(int xCoordinate, int yCoordinate) {
-		if(array[xCoordinate][yCoordinate].isOccupied()){
+	public String getIsOccupiedFrom(final int xCoordinate, final int yCoordinate) {
+		if (array[xCoordinate][yCoordinate].isOccupied()) {
 			return array[xCoordinate][yCoordinate].getOccupiedByPlayer();
 		}
 		return "";

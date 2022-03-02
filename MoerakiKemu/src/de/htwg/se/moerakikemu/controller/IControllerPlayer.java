@@ -1,12 +1,16 @@
 package de.htwg.se.moerakikemu.controller;
 
-public interface IControllerPlayer {	
+/**
+ * Methods to manage the values of the two participating players.
+ */
+public interface IControllerPlayer {
+
 	/**
 	 * set the Names of the two players
-	 * @param name of player 1
-	 * @param name of player 2
+	 * @param player1name Name of player 1.
+	 * @param player2name Name of player 2.
 	 */
-	public void setName(String player1name, String player2name);
+	void setName(String player1name, String player2name);
 	
 	/**
 	 * set the points of the player to zero
@@ -48,13 +52,11 @@ public interface IControllerPlayer {
 	
 	/**
 	 * adds a Point to Player 1
-	 * @param A String, not null
 	 */
 	void addAPointPlayer1();
 	
 	/**
 	 * adds a Point to Player 2
-	 * @param A String, not null
 	 */
 	void addAPointPlayer2();
 	

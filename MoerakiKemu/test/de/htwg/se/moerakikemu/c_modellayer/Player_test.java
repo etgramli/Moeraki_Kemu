@@ -9,7 +9,7 @@ import de.htwg.se.moerakikemu.modellayer.modellayerimpl.Player;
 
 
 public class Player_test {
-	Player player;
+	private Player player;
 
 	@Before
 	public void setUp(){
@@ -18,8 +18,9 @@ public class Player_test {
 	
 	@Test
 	public void test_getName_returnNotNullString(){
-		player.setName("alpha");
-		assertEquals("alpha", player.getName());
+		final String playerName = "alpha";
+		player.setName(playerName);
+		assertEquals(playerName, player.getName());
 	}
 	
 	@Test

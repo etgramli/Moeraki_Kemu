@@ -13,15 +13,14 @@ import de.htwg.se.moerakikemu.controller.IController;
 public class MainMenu extends JMenuBar implements ActionListener{
 	private static final long serialVersionUID = -6197107387907014280L;
 
+	private IController myController;
 	
-	IController myController;
-	
-	JMenu game;
-	JMenuItem quit;
-	JMenuItem newGame;
-	JMenu moreInfos;
-	JMenuItem help;
-	JMenuItem info;
+	private JMenu game;
+	private JMenuItem quit;
+	private JMenuItem newGame;
+	private JMenu moreInfos;
+	private JMenuItem help;
+	private JMenuItem info;
 
 	public MainMenu (IController controller) {
 		this.myController = controller;

@@ -30,25 +30,16 @@ public class MoerakiKemu {
 		
 		IController controller = injector.getInstance(Controller.class);
 	
-		UserInterface[] interfaces;
-		interfaces = new UserInterface[2];
+		UserInterface[] interfaces =  new UserInterface[2];
 		interfaces[0] = injector.getInstance(TextUI.class);
 		interfaces[1] = injector.getInstance(GUI.class);
 
-		for (int i = 0; i < interfaces.length; i++) {
-			((IObserverSubject) controller).attatch((ObserverObserver) interfaces[i]);
-			interfaces[i].drawCurrentState();
+		for (UserInterface iface : interfaces) {
+			((IObserverSubject) controller).attatch((ObserverObserver) iface);
+			iface.drawCurrentState();
 		}
 
-		// Used to query Player names
-		((ObserverObserver) interfaces[1]).update();
-		
-		boolean finished = false;
-		while (!finished) {
-			finished = controller.testIfEnd();
-			interfaces[0].update();
-			interfaces[1].update();
-		}
+		while (!controller.testIfEnd());
 		
 		for (UserInterface ui : interfaces) {
 			ui.quit();

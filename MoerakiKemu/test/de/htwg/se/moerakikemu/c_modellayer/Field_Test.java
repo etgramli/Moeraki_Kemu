@@ -11,17 +11,15 @@ import de.htwg.se.moerakikemu.modellayer.modellayerimpl.Player;
 public class Field_Test {
 	
 	private static final int EDGELENGTH = 6;
+	private static final String PLAYERNAME = "Player1";
 
-	Field errorField;
-	Field field;
-	Player player1;
-	Player player2;
+	private Field field;
+	private Player player1;
 
 	@Before
 	public void setUp() {
 		field = new Field(EDGELENGTH);
 		player1 = new Player();
-		player2 = new Player();
 	}
 
 	@Test
@@ -47,7 +45,7 @@ public class Field_Test {
 
 	@Test
 	public void test_getIsOccupied_occupyReturnsTrue() {
-		field.occupy(3, 4, "Player");
+		field.occupy(3, 4, PLAYERNAME);
 		assertTrue(field.getIsOccupied(3, 4));
 	}
 	
@@ -58,10 +56,10 @@ public class Field_Test {
 	
 	@Test
 	public void test_isFilled_notAllOccupiedReturnsFalse() {
-		field.occupy(2, 3, "P1");
-		field.occupy(2, 4, "P1");
-		field.occupy(4, 3, "P1");
-		field.occupy(5, 3, "P1");
+		field.occupy(2, 3, PLAYERNAME);
+		field.occupy(2, 4, PLAYERNAME);
+		field.occupy(4, 3, PLAYERNAME);
+		field.occupy(5, 3, PLAYERNAME);
 		assertFalse(field.isFilled());
 	}
 	
@@ -69,7 +67,7 @@ public class Field_Test {
 	public void test_isFilled_allOccupiedReturnsTrue() {
 		for(int i = 0; i < EDGELENGTH; i++) {
 			for(int j = 0; j < EDGELENGTH; j++) {
-				field.occupy(i, j, "Spieler");
+				field.occupy(i, j, PLAYERNAME);
 			}
 		}
 		assertTrue(field.isFilled());
@@ -77,6 +75,6 @@ public class Field_Test {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void test_constructor_negativeEdgelengthThrowsException() {
-		errorField = new Field(-1);
+		new Field(-1);
 	}
 }

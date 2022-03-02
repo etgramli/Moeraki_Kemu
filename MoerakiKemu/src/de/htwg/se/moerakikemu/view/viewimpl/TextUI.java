@@ -16,14 +16,13 @@ public class TextUI implements UserInterface, ObserverObserver {
 
 	private static final Logger LOGGER = (Logger) LogManager.getLogger(TextUI.class);
 	
-	IController myController;
-	IControllerPlayer myPlayerController;
+	private IController myController;
+	private IControllerPlayer myPlayerController;
 
 	@Inject
 	public TextUI(IController controller, IControllerPlayer playerController) {
 		myController = controller;
 		myPlayerController = playerController;
-		queryPlayerName();
 	}
 	
 	public void queryPlayerName() {
@@ -44,7 +43,7 @@ public class TextUI implements UserInterface, ObserverObserver {
 	 * Player 2: x points
 	 */
 	public void drawCurrentState() {
-		int edgeLength = myController.getEdgeLength();
+		final int edgeLength = myController.getEdgeLength();
 		
 		printColumnIdentifiers(edgeLength);
 		for(int i = 0; i < edgeLength; i++) {
@@ -60,11 +59,10 @@ public class TextUI implements UserInterface, ObserverObserver {
 		}
 		printLine(edgeLength);
 		printPoints();
-		
 	}
 
 	private String printLeadingNumber(final int currentNumber, final int edgeLength) {
-		int offset = offset(edgeLength).length();
+		final int offset = offset(edgeLength).length();
 		
 		StringBuilder builder = new StringBuilder(Integer.toString(currentNumber));
 		
@@ -100,7 +98,7 @@ public class TextUI implements UserInterface, ObserverObserver {
 	 * @return The empty spaces for offset as String, not null.
 	 */
 	private String offset(int edgeLength) {
-		int numDigits = String.valueOf(edgeLength).length();
+		final int numDigits = String.valueOf(edgeLength).length();
 
 		StringBuilder offsetBuilder = new StringBuilder();
 		for (int l = 0; l < numDigits; l++) {
@@ -131,10 +129,10 @@ public class TextUI implements UserInterface, ObserverObserver {
 		StringBuilder headlineBuilder = new StringBuilder(offset(edgeLength));
 		for (int i = 1; i <= edgeLength; i++) {
 			if(i < 10){
-				headlineBuilder.append(" ").append(i).append(" ");
-			} else {
-				headlineBuilder.append(i).append(" ");
+				headlineBuilder.append(" ");
 			}
+			headlineBuilder.append(i).append(" ");
+
 		}
 		LOGGER.info(headlineBuilder.toString());
 	} 
@@ -142,25 +140,24 @@ public class TextUI implements UserInterface, ObserverObserver {
 	public void printMessage(String msg) {
 		LOGGER.error(msg + "\n");
 	}
-	
+
+	private static final String WINNERIS = "Der Gewinner ist ";
+	private static final String DRAW = "Unentschieden";
+	private String getWinnerString() {
+		return "".equals(myController.getWinner()) ? DRAW : WINNERIS + myController.getWinner() + "!!!";
+	}
+
 	/**
 	 * Prints the winner and ends the game.
-	 *
-	 * @return the boolean  - value for the MoerakiKemu - class to finish the game.
 	 */
 	@Override
 	public void quit(){
-		String winner = myController.getWinner();
-		if(!"".equals(winner)){
-			LOGGER.error("Der Gewinner ist " + winner + "!!!\n");
-		} else {
-			LOGGER.error("Unentschieden");
-		}
+		LOGGER.error(getWinnerString());
 	}
 
 	@Override
 	public void update() {
-		State controllerState = myController.getState();
+		final State controllerState = myController.getState();
 		if (controllerState == State.PLAYER_OCCUPIED) {
 			drawCurrentState();
 		} else if (controllerState == State.GAME_FINISHED) {
@@ -168,15 +165,12 @@ public class TextUI implements UserInterface, ObserverObserver {
 		} else if (controllerState == State.QUERY_PLAYER_NAME) {
 			queryPlayerName();
 		} else if (controllerState == State.PLAYER_WON) {
-			String winner = myController.getWinner();
-			String display = ("".equals(winner)) ?  "Ein Unentschieden!" :
-				"Der Gewinner ist: " + winner + "!!!";
-			LOGGER.error(display);
+			LOGGER.error(getWinnerString());
 		}
 	}
 
 	@Override
-	public void addPoints(int pointsPlayer1, int pointsPlayer2) {
+	public void addPoints(final int pointsPlayer1, final int pointsPlayer2) {
 		LOGGER.error(myPlayerController.getPlayer1Name() + " hat " + pointsPlayer1 + "Punkte");
 		LOGGER.error(myPlayerController.getPlayer2Name() + " hat " + pointsPlayer2 + "Punkte");
 	}

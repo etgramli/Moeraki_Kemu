@@ -9,5 +9,5 @@ public interface ObserverObserver {
 	/**
 	 * Updates the Observer to the current State of the controller.
 	 */
-	public void update();
+	void update();
 }
